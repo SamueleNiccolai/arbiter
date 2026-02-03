@@ -225,8 +225,16 @@ go test ./...
 
 ### 5.2 Frontend Testing Tools
 
+The Wails template scaffolds old dependency versions (`vite 3.x`, `@vitejs/plugin-react 2.x`, `typescript 4.x`). These must be upgraded first — Vitest 4.x requires Vite 6.x.
+
 ```bash
 cd frontend
+
+# Upgrade Wails-scaffolded deps to versions compatible with Vitest 4.x
+npm install -D vite@^6.0.0 @vitejs/plugin-react@^4.3.0 typescript@^5.5.0
+
+# Add Node type definitions (needed for path.resolve and __dirname in vitest.config.ts)
+npm install -D @types/node@^20.0.0
 
 # Vitest for testing
 npm install -D vitest @vitest/ui
@@ -270,6 +278,23 @@ export default defineConfig({
     },
   },
 })
+```
+
+Update `frontend/tsconfig.node.json` to include the vitest config (otherwise TypeScript won't recognize it):
+
+```json
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "vite.config.ts",
+    "vitest.config.ts"
+  ]
+}
 ```
 
 Create test setup at `frontend/src/test/setup.ts`:
