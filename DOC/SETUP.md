@@ -129,7 +129,6 @@ build/bin/
 # Frontend
 frontend/node_modules/
 frontend/dist/
-frontend/wailsjs/
 
 # IDE
 .idea/
@@ -237,7 +236,7 @@ npm install -D vite@^6.0.0 @vitejs/plugin-react@^4.3.0 typescript@^5.5.0
 npm install -D @types/node@^20.0.0
 
 # Vitest for testing
-npm install -D vitest @vitest/ui
+npm install -D vitest @vitest/ui @vitest/coverage-v8
 
 # Testing Library for React component tests
 npm install -D @testing-library/react @testing-library/jest-dom @testing-library/user-event
@@ -327,7 +326,67 @@ Return to project root:
 cd ..
 ```
 
-### 5.3 Commit Test Infrastructure
+### 5.3 ESLint Setup
+
+```bash
+cd frontend
+
+# ESLint and its dependencies
+npm install -D eslint @eslint/js globals
+```
+
+Create `frontend/eslint.config.js` (ESLint 9 flat config):
+
+```javascript
+import js from "@eslint/js";
+import globals from "globals";
+
+export default [
+  {
+    ignores: ["dist/**", "wailsjs/**", "node_modules/**"],
+  },
+
+  js.configs.recommended,
+
+  {
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+      },
+    },
+    rules: {
+      "no-unused-vars": "warn",
+      "no-undef": "error",
+      "no-prototype-builtins": "off",
+      "no-cond-assign": ["error", "except-parens"],
+    },
+  },
+];
+```
+
+Add the lint script to `frontend/package.json`:
+```json
+{
+  "scripts": {
+    "lint": "eslint ."
+  }
+}
+```
+
+Verify the linter runs:
+```bash
+npm run lint
+```
+
+Return to project root:
+```bash
+cd ..
+```
+
+### 5.4 Commit Test Infrastructure
 
 ```bash
 git add .
@@ -387,6 +446,11 @@ jobs:
         with:
           go-version: '1.22'
 
+      - name: Prepare frontend dist
+        run: |
+          mkdir -p frontend/dist
+          echo "dummy" > frontend/dist/index.html
+
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v4
         with:
@@ -404,8 +468,13 @@ jobs:
           go-version: '1.22'
           cache: true
 
+      - name: Prepare frontend dist
+        run: |
+          mkdir -p frontend/dist
+          echo "dummy" > frontend/dist/index.html
+
       - name: Run tests with coverage
-        run: go test -race -coverprofile=coverage.out ./...
+        run: go test -v -race -coverprofile=coverage.out ./...
 
       - name: Display coverage
         run: go tool cover -func=coverage.out

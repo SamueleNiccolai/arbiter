@@ -3,7 +3,6 @@
 # =====================
 build/
 build/bin/
-frontend/wailsjs/
 package.json.md5
 
 # =====================
