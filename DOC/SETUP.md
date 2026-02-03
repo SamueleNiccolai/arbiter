@@ -505,8 +505,8 @@ chmod +x .git/hooks/pre-commit
 
 ```bash
 # Docker SDK
-go get github.com/docker/docker/client
-go get github.com/docker/docker/api/types
+go get github.com/moby/moby/client
+go get github.com/moby/moby/api/types
 
 # S3/MinIO storage
 go get github.com/aws/aws-sdk-go-v2
