@@ -1,0 +1,75 @@
+# =====================
+# Wails
+# =====================
+build/
+build/bin/
+frontend/wailsjs/
+package.json.md5
+
+# =====================
+# Frontend (Node / Vite / React)
+# =====================
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.vite/
+
+# =====================
+# Go
+# =====================
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+go.work.sum
+
+# =====================
+# IDE / Editor
+# =====================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# =====================
+# OS
+# =====================
+.DS_Store
+Thumbs.db
+
+# =====================
+# Environment
+# =====================
+.env
+.env.local
+*.local
+
+# =====================
+# Test coverage
+# =====================
+coverage.out
+coverage.html
+frontend/coverage/
+
+# =====================
+# Logs
+# =====================
+*.log
+
+# =====================
+# Personal / Private
+# =====================
+private/
+*.private.md
+
+# =====================
+# Calude
+# =====================
+.claude/
